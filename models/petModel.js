@@ -1,0 +1,1 @@
+// Berisi properti tabel pet
