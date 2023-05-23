@@ -1,7 +1,5 @@
-// Berisi properti tabel user
-
-const { Sequelize } = require('sequelize');
-const db = require('../config/database');
+import { Sequelize } from 'sequelize';
+import db from '../config/database.js';
 
 const { DataTypes } = Sequelize;
 const User = db.define('user', {
@@ -10,10 +8,6 @@ const User = db.define('user', {
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
-    },
-    phoneNumber: {
-       type: DataTypes.STRING,
-       allowNull: false,
     },
     email: {
         type: DataTypes.STRING,
@@ -26,8 +20,11 @@ const User = db.define('user', {
         type: DataTypes.STRING,
         allowNull: false,
      },
+     phoneNumber: {
+        type: DataTypes.STRING,
+     },
 }, {
     freezeTableName: true,
 });
 
-module.exports = User;
+export default User
