@@ -1,9 +1,9 @@
 // Berisi properti tabel pet
 
-const { Sequelize } = require('sequelize');
-const db = require('../config/database');
-const User = require('./userModel');
-const PetCategory = require('./petCategoryModel');
+import { Sequelize } from 'sequelize';
+import db from '../config/database.js';
+import User from './userModel.js';
+import PetCategory from './petCategoryModel.js';
 
 const { DataTypes } = Sequelize;
 const Pet = db.define('pet', {
@@ -31,7 +31,11 @@ const Pet = db.define('pet', {
     breed: {
         type: DataTypes.STRING,
         allowNull: false,
-     },
+    },
+    characters: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     age: {
         type: DataTypes.ENUM('baby', 'young', 'adult'),
         allowNull: false,
@@ -68,4 +72,4 @@ Pet.belongsTo(PetCategory,{
     foreignKey: 'petCategory'
 })
 
-module.exports = Pet;
+export default Pet;
