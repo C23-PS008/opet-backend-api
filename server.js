@@ -1,10 +1,11 @@
-const express = require('express');
-const dotenv  = require('dotenv');
-const { Sequelize } = require('sequelize');
-const db = require('./config/database');
-const User = require('./models/userModel');
-const Pet = require('./models/petModel');
-const PetCategory = require('./models/petCategoryModel');
+import express from 'express';
+import dotenv from 'dotenv';
+import { Sequelize } from 'sequelize';
+import db from './config/database.js';
+import User from './models/userModel.js';
+import Pet from './models/petModel.js';
+import PetCategory from './models/petCategoryModel.js';
+import UserRoute from './routes/userRoute.js';
 
 dotenv.config();
 
@@ -18,6 +19,9 @@ const app = express();
 //     await PetCategory.sync({ force: true });
 //     await Pet.sync({ force: true });
 // })();
+
+app.use(express.json());
+app.use(UserRoute);
   
 app.get('/', (req, res) => {
   res.send(`<h1>Welcome to OPet API<h1>`);

@@ -1,7 +1,7 @@
 // Untuk Connect ke mySQL
 
-const { Sequelize } = require('sequelize')
-const dotenv = require('dotenv');
+import { Sequelize } from 'sequelize';
+import dotenv from'dotenv';
 dotenv.config();
 
 const {
@@ -16,4 +16,4 @@ const db = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     dialect: 'mysql'
 });
 
-module.exports = db;
+export default db;

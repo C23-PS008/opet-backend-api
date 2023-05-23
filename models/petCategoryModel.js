@@ -1,5 +1,5 @@
-const { Sequelize } = require('sequelize');
-const db = require('../config/database');
+import { Sequelize } from 'sequelize';
+import db from '../config/database.js';
 
 const { DataTypes } = Sequelize;
 const PetCategory = db.define('pet_category', {
@@ -17,4 +17,4 @@ const PetCategory = db.define('pet_category', {
     timestamps: false,
 });
 
-module.exports = PetCategory;
+export default PetCategory;
