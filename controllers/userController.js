@@ -7,7 +7,9 @@ const register = async (req, res) => {
         name, email, password
     } = req.body;
 
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ 
+        where:{ email } 
+    });
     if(user) return res.status(400).json(requestResponse.failed("Email already exist!"))
 
     const saltRounds = 10;
