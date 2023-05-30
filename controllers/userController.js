@@ -22,7 +22,7 @@ const register = async (req, res) => {
             email,
             password: hashPassword,
         });
-        res.status(201).json(requestResponse.success('Successfull Registration'))
+        res.status(201).json(requestResponse.success('Successfull registration'))
     } catch (error) {
         res.status(400).json(requestResponse.failed(error.message));
     }
