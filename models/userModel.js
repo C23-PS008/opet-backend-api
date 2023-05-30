@@ -9,6 +9,10 @@ const User = db.define('user', {
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
     },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
