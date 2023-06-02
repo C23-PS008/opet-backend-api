@@ -15,7 +15,7 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-// Synchronize database (uncomment this if you want to create table)
+/* Synchronize database (uncomment this if you want to create table) */
 // (async () => {
 //     await User.sync({ force: true });
 //     await PetCategory.sync({ force: true });
@@ -37,6 +37,7 @@ app.use(express.json());
 app.use(UserRoute);
 app.use(AuthRoute);
 
+/* To store session data (uncomment this to create session table) */
 // store.sync();
 
 app.get('/', (req, res) => {

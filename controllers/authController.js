@@ -19,7 +19,7 @@ export const login = async (req, res) => {
     const { uid, name, email } = user;
     const data = { uid, name, email };
 
-    res.status(200).json(requestResponse. successWithData('Login success!', data))
+    res.status(200).json(requestResponse.successWithData('Login success!', data))
 }
 
 export const logout = (req, res) => {
