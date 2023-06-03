@@ -1,5 +1,3 @@
-// Untuk Connect ke mySQL
-
 import { Sequelize } from 'sequelize';
 import dotenv from'dotenv';
 dotenv.config();

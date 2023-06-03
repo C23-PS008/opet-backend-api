@@ -1,9 +1,8 @@
 import express from 'express';
-import {register, updateProfile, } from '../controllers/userController.js';
-import { verifUser } from '../middleware/authUser.js';
+import { updateProfile, } from '../controllers/userController.js';
+import { verifyToken } from '../middleware/authJwt.js';
 const router = express.Router();
 
-router.post('/register', register);
-router.put('/users/:id', verifUser, updateProfile)
+router.put('/users/:id', verifyToken, updateProfile)
 
 export default router;
