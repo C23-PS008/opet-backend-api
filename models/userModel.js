@@ -24,7 +24,7 @@ const User = db.define('user', {
         type: DataTypes.STRING,
         allowNull: false,
      },
-     phoneNumber: {
+    phoneNumber: {
         type: DataTypes.STRING,
      },
 }, {

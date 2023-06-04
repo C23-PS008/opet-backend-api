@@ -7,10 +7,10 @@ const requestResponse = {
         "error": true,
         "message": message,
     }),
-    successWithData: (message, result) => ({
+    successWithData: (message, data) => ({
         "error": false,
         "message": message,
-        "result": result,
+        "data": data,
     }),
     serverError: (message) => ({
         "error": true,
