@@ -2,7 +2,7 @@ runtime: nodejs18
 service: backend
 
 env_variables:
-  PORT: ${secrets.my-port}
+  PORT: "5000"
   DB_HOST: ${secrets.my-db-host}
   DB_NAME: ${secrets.my-db-name}
   DB_USERNAME: ${secrets.my-db-username}
