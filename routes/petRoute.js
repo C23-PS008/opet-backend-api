@@ -1,11 +1,12 @@
 import express from 'express';
-import { 
-    uploadPet, 
-    getAllPets, 
-    getPetById, 
-    getMyPets, 
-    updatePet, 
-    deletePet, } from '../controllers/petController.js';
+import {
+  uploadPet,
+  getAllPets,
+  getPetById,
+  getMyPets,
+  updatePet,
+  deletePet,
+} from '../controllers/petController.js';
 import { verifyToken } from '../middleware/authJwt.js';
 const router = express.Router();
 
