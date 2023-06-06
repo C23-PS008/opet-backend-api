@@ -1,12 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import multer from 'multer';
-import { fileStorage, fileFilter } from './config/multer.js';
 import db from './config/database.js';
 import UserRoute from './routes/userRoute.js';
 import AuthRoute from './routes/authRoute.js';
 import PetRoute from './routes/petRoute.js';
 import bodyParser from 'body-parser';
+import { uploadFile } from './config/multer.js';
 
 dotenv.config();
 
@@ -18,15 +17,13 @@ const app = express();
 //     db.sync({ force: true });
 // })();
 
-app.use(multer({
-  storage: fileStorage,
-  fileFilter: fileFilter
-}).single('image'));
 app.use(bodyParser.json());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(UserRoute);
 app.use(AuthRoute);
 app.use(PetRoute);
+
+app.post('/upload', uploadFile);
 
 app.get('/', (req, res) => {
   res.send(`<h1>Welcome to OPet API<h1>`);
