@@ -1,8 +1,12 @@
 import multer from 'multer';
 import { Storage } from '@google-cloud/storage';
+import path from 'path';
+
+const pathKey = path.resolve('./serviceaccountkey.json')
 
 const storage = new Storage({
   projectId: 'capstone-opet',
+  keyFilename: pathKey,
 });
 
 const bucketName = 'bucket_for_pet_photos';
