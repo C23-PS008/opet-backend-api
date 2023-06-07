@@ -38,8 +38,6 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const {
-      uid,
-      name,
       email,
       password
     } = req.body;
@@ -56,6 +54,11 @@ export const login = async (req, res) => {
     if (!match) return res.status(400).json(requestResponse.failed('Incorrect password'));
 
     const token = jwt.sign({ uid: user.uid }, process.env.SECRET_KEY, { expiresIn: 86400 });
+
+    const {
+      uid,
+      name,
+    } = user;
     const data = { uid, name, email, token }
     res.status(200).json(requestResponse.successWithData('Login success!', data))
 
