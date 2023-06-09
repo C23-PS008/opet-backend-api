@@ -1,56 +1,51 @@
-import multer from 'multer';
-import { Storage } from '@google-cloud/storage';
-import path from 'path';
+'use strict'
+const {Storage} = require('@google-cloud/storage')
+const fs = require('fs')
+const dateFormat = require('dateformat')
+const path = require('path');
 
 const pathKey = path.resolve('./serviceaccountkey.json')
 
-const storage = new Storage({
-  projectId: 'capstone-opet',
-  keyFilename: pathKey,
-});
+// TODO: Sesuaikan konfigurasi Storage
+const gcs = new Storage({
+    projectId: 'capstone-opet',
+    keyFilename: pathKey
+})
 
-const bucketName = 'bucket_for_pet_photos';
+// TODO: Tambahkan nama bucket yang digunakan
+const bucketName = 'bucket_for_pet_photos'
+const bucket = gcs.bucket(bucketName)
 
-const multerStorage = multer.memoryStorage();
+function getPublicUrl(filename) {
+    return 'https://storage.googleapis.com/' + bucketName + '/' + filename;
+}
 
-const upload = multer({
-  storage: multerStorage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // batasan ukuran file (opsional)
-  },
-});
+let ImgUpload = {}
 
-export const fileUpload = upload.single('file');
+ImgUpload.uploadToGcs = (req, res, next) => {
+    if (!req.file) return next()
 
-export const uploadFile = async (req, res, next) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded.' });
-    }
+    const gcsname = dateFormat(new Date(), "yyyymmdd-HHMMss")
+    const file = bucket.file(gcsname)
 
-    const bucket = storage.bucket(bucketName);
-    const fileData = req.file;
+    const stream = file.createWriteStream({
+        metadata: {
+            contentType: req.file.mimetype
+        }
+    })
 
-    const blob = bucket.file(fileData.originalname);
+    stream.on('error', (err) => {
+        req.file.cloudStorageError = err
+        next(err)
+    })
 
-    const blobStream = blob.createWriteStream({
-      resumable: false,
-      contentType: fileData.mimetype,
-    });
+    stream.on('finish', () => {
+        req.file.cloudStorageObject = gcsname
+        req.file.cloudStoragePublicUrl = getPublicUrl(gcsname)
+        next()
+    })
 
-    blobStream.on('error', (err) => {
-      console.log(err);
-      next(err);
-    });
+    stream.end(req.file.buffer)
+}
 
-    blobStream.on('finish', () => {
-      const publicUrl = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
-      res.status(200).json({ url: publicUrl });
-    });
-
-    blobStream.end(fileData.buffer);
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-};
+module.exports = ImgUpload
