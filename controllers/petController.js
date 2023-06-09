@@ -3,10 +3,14 @@ import PetCategory from '../models/petCategoryModel.js';
 import Pet from '../models/petModel.js';
 import requestResponse from '../response.js';
 import { Op } from 'sequelize';
+import { imgUpload } from './imgUploadController.js';
 
 export const uploadPet = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json(requestResponse.failed("Please upload the image"))
+    if (!req.file) return res.status(400).json(requestResponse.failed("Please upload the image!"));
+    
+    const myImage = req.file
+    const imageUrl = await imgUpload(myImage);
 
     const {
       name,
@@ -20,11 +24,10 @@ export const uploadPet = async (req, res) => {
       lon,
       lat,
     } = req.body
-    const image = req.file.path;
 
     await Pet.create({
       name,
-      photoUrl: image,
+      photoUrl: imageUrl,
       petCategory,
       breed,
       characters,
@@ -169,11 +172,11 @@ export const updatePet = async (req, res) => {
       lat,
     } = req.body
 
-    let image = "";
+    let imageUrl = "";
     if (!req.file) {
-      image = pet.photoUrl;
+      imageUrl = pet.photoUrl;
     } else {
-      image = req.file.path;
+      imageUrl = await imgUpload(req.file);
     }
 
     if (req.userId !== pet.ownerId) return res.status(403)
@@ -181,7 +184,7 @@ export const updatePet = async (req, res) => {
 
     await Pet.update({
       name,
-      photoUrl: image,
+      photoUrl: imageUrl,
       breed,
       characters,
       age,
