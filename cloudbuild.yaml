@@ -1,6 +1,8 @@
 steps:
   - name: "gcr.io/cloud-builders/npm"
-    args: ["install", "create-env"]
+    args: ["install"]
+  - name: "gcr.io/cloud-builders/npm"
+    args: ["run", "create-env"]
     env:
       - "PORT=${_PORT}"
       - "DB_HOST=${_DB_HOST}"
