@@ -1,6 +1,12 @@
 steps:
   - name: "gcr.io/cloud-builders/npm"
-    args: ["install"]
-
+    args: ["install", "create-env"]
+    env:
+      - "PORT=${_PORT}"
+      - "DB_HOST=${_DB_HOST}"
+      - "DB_NAME=${_DB_NAME}"
+      - "DB_USERNAME=${_DB_USERNAME}"
+      - "DB_PASSWORD=${_DB_PASSWORD}"
+      - "SECRET_KEY=${_SECRET_KEY}"
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
