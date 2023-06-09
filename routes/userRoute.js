@@ -1,9 +1,9 @@
 import express from 'express';
-import { getProfileById, updateProfile, } from '../controllers/userController.js';
+import { getProfile, updateProfile, } from '../controllers/userController.js';
 import { verifyToken } from '../middleware/authJwt.js';
 const router = express.Router();
 
-router.get('/users/:id', verifyToken, getProfileById)
+router.get('/users/me', verifyToken, getProfile)
 router.put('/users/:id', verifyToken, updateProfile)
 
 export default router;
