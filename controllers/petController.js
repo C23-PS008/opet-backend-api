@@ -2,7 +2,7 @@ import User from '../models/userModel.js';
 import PetCategory from '../models/petCategoryModel.js';
 import Pet from '../models/petModel.js';
 import requestResponse from '../response.js';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import { imgUpload } from './imgUploadController.js';
 
 export const uploadPet = async (req, res) => {
@@ -45,23 +45,41 @@ export const uploadPet = async (req, res) => {
   }
 }
 
-export const getAllPets = async (req, res) => {
+export const getPetsList = async (req, res) => {
   try {
-    const result = await Pet.findAll({
-      attributes: [
-        'petId',
-        'name',
-        'photoUrl',
-        'petCategory',
-        'breed',
-        'characters',
-        'age',
-        'size',
-        'gender',
-        'about',
-        'lon',
-        'lat',
-      ],
+    const where = {};
+    const {type, page, size, breed} = req.query;
+
+    const getPagination = (page, size) => {
+      const limit = size ? +size : 10;
+      const offset = page ? page * limit : 0;
+      return {limit, offset};
+    };
+    const {limit, offset} = getPagination(page, size);
+
+    switch (type) {
+      case 'all':
+        where.petCategory = {[Sequelize.Op.or]: [1, 2]};
+        break;
+      case 'cat':
+        where.petCategory = 1;
+        break;
+      case 'dog':
+        where.petCategory = 2;
+        break;
+      default:
+        return res.status(404).json(requestResponse.failed('Valid type is required!'));
+    };
+    
+    if(breed) where.breed = {[Sequelize.Op.like]: `%${breed}%`};
+
+    const result = await Pet.findAndCountAll({
+      where: {
+        ...where,
+      }, 
+      limit, 
+      offset,
+      attributes: {exclude: ['ownerId']},
       include: [{
         model: User,
         attributes: ['name', 'phoneNumber'],
@@ -86,20 +104,7 @@ export const getPetById = async (req, res) => {
     if (!pet) return res.status(404).json(requestResponse.failed('Pet not found'));
 
     const result = await Pet.findOne({
-      attributes: [
-        'petId',
-        'name',
-        'photoUrl',
-        'petCategory',
-        'breed',
-        'characters',
-        'age',
-        'size',
-        'gender',
-        'about',
-        'lon',
-        'lat',
-      ],
+      attributes: {exclude: ['ownerId']},
       where: {
         petId: pet.petId,
       },
@@ -120,20 +125,7 @@ export const getPetById = async (req, res) => {
 export const getMyPets = async (req, res) => {
   try {
     const result = await Pet.findAll({
-      attributes: [
-        'petId',
-        'name',
-        'photoUrl',
-        'petCategory',
-        'breed',
-        'characters',
-        'age',
-        'size',
-        'gender',
-        'about',
-        'lon',
-        'lat',
-      ],
+      attributes: {exclude: ['ownerId']},
       where: {
         ownerId: req.userId,
       },

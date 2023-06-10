@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   uploadPet,
-  getAllPets,
+  getPetsList,
   getPetById,
   getMyPets,
   updatePet,
@@ -10,8 +10,8 @@ import {
 import { verifyToken } from '../middleware/authJwt.js';
 const router = express.Router();
 
-router.get('/pets', getAllPets);
-router.get('/pets/:id', getPetById);
+router.get('/pets', verifyToken, getPetsList);
+router.get('/pets/:id', verifyToken, getPetById);
 router.post('/mypets', verifyToken, uploadPet);
 router.get('/mypets', verifyToken, getMyPets);
 router.put('/mypets/:id', verifyToken, updatePet);
