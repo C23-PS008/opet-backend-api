@@ -79,10 +79,10 @@ export const getPetsList = async (req, res) => {
       }, 
       limit, 
       offset,
-      attributes: {exclude: ['ownerId']},
+      attributes: {exclude: ['ownerId', 'petCategory']},
       include: [{
         model: User,
-        attributes: ['name', 'phoneNumber'],
+        attributes: ['name', 'email', 'phoneNumber'],
       }, {
         model: PetCategory,
         attributes: ['categoryName']
@@ -104,13 +104,13 @@ export const getPetById = async (req, res) => {
     if (!pet) return res.status(404).json(requestResponse.failed('Pet not found'));
 
     const result = await Pet.findOne({
-      attributes: {exclude: ['ownerId']},
+      attributes: {exclude: ['ownerId', 'petCategory']},
       where: {
         petId: pet.petId,
       },
       include: [{
         model: User,
-        attributes: ['name', 'phoneNumber'],
+        attributes: ['name', 'email', 'phoneNumber'],
       }, {
         model: PetCategory,
         attributes: ['categoryName']
@@ -125,13 +125,13 @@ export const getPetById = async (req, res) => {
 export const getMyPets = async (req, res) => {
   try {
     const result = await Pet.findAll({
-      attributes: {exclude: ['ownerId']},
+      attributes: {exclude: ['ownerId', 'petCategory']},
       where: {
         ownerId: req.userId,
       },
       include: [{
         model: User,
-        attributes: ['name', 'phoneNumber'],
+        attributes: ['name', 'email', 'phoneNumber'],
       }, {
         model: PetCategory,
         attributes: ['categoryName']
@@ -194,7 +194,7 @@ export const updatePet = async (req, res) => {
       },
       include: [{
         model: User,
-        attributes: ['name', 'phoneNumber'],
+        attributes: ['name', 'email', 'phoneNumber'],
       }, {
         model: PetCategory,
         attributes: ['categoryName']
