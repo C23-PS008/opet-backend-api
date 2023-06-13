@@ -79,7 +79,7 @@ export const getPetsList = async (req, res) => {
       }, 
       limit, 
       offset,
-      attributes: {exclude: ['ownerId', 'petCategory']},
+      attributes: {exclude: ['ownerId']},
       include: [{
         model: User,
         attributes: ['name', 'email', 'phoneNumber'],
@@ -104,7 +104,7 @@ export const getPetById = async (req, res) => {
     if (!pet) return res.status(404).json(requestResponse.failed('Pet not found'));
 
     const result = await Pet.findOne({
-      attributes: {exclude: ['ownerId', 'petCategory']},
+      attributes: {exclude: ['ownerId']},
       where: {
         petId: pet.petId,
       },
@@ -125,7 +125,7 @@ export const getPetById = async (req, res) => {
 export const getMyPets = async (req, res) => {
   try {
     const result = await Pet.findAll({
-      attributes: {exclude: ['ownerId', 'petCategory']},
+      attributes: {exclude: ['ownerId']},
       where: {
         ownerId: req.userId,
       },
