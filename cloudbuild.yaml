@@ -11,4 +11,10 @@ steps:
       - "DB_PASSWORD=${_DB_PASSWORD}"
       - "SECRET_KEY=${_SECRET_KEY}"
   - name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        gcloud secrets versions access latest --secret="gcs_sa" > /workspace/serviceaccountkey.json
+  - name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
